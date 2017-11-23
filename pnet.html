@@ -1,0 +1,349 @@
+﻿<html>
+<head>
+    <title>PNets</title>
+    <script src="scripts/jquery-1.9.1.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="css/bootstrap_override.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="scripts/raphael-min.js"></script>
+    <script src="js/arrows.js"></script>
+    <script src="js/pnet.js"></script>
+    <script src="js/pnet_run.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/ui.js"></script>
+	<style>
+	.fa-cog{font-size:36px;color:red;}
+        .cursor-hand {
+            cursor: pointer;
+        }
+	</style>
+</head>
+<body onload="onload()" onresize="body_onresize()">
+<!-- Wrap all page content here -->
+    <div id="wrap">
+
+        <!-- Fixed navbar -->
+        <div class="navbar navbar-default navbar-fixed-top" onclick="">
+            <div class="container-fluid">
+                <div class="nav navbar-header">
+                    <a id="logo_link" class="navbar-brand" style="cursor:pointer" onclick="javascript: window.location = 'index.html'"><img src="images/logo.png" height="25"></a>
+                    <div class="btn-group navbar-btn">
+                        <code id="selected_label" onclick="toolbar_clicked()" style="cursor:pointer; float:left;font-family:'Courier New';width: 60px;text-align:center;font-weight:bolder; font-size:12pt; border:solid gray 1px;">&nbsp;</code>
+                    </div>
+                    &nbsp;
+                    <div class="btn-group navbar-btn">
+                        <button class="btn btn-success btn-sm" id="btnTokenAdd">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-success btn-sm" id="btnTokenRemove">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </div>
+                </div>
+                &nbsp;
+                <div class="btn-group navbar-btn">
+                    <button class="btn btn-primary btn-sm" id="btnAddPlace">
+                        <span class="glyphicon glyphicon-plus"></span> Place
+                    </button>
+                    <button class="btn btn-primary btn-sm" id="btnAddTrans">
+                        <span class="glyphicon glyphicon-plus"></span> Transition
+                    </button>
+                    <button class="btn btn-primary btn-sm" id="btnRemoveObj">
+                        <span class="glyphicon glyphicon-remove"></span> Remove
+                    </button>
+                    <button class="btn btn-primary btn-sm" id="btnClearPaper">
+                        <span class="glyphicon glyphicon-remove-circle"></span> Clear
+                    </button>
+                </div>
+                &nbsp;
+                <div class="btn-group">
+                    <button class="btn btn-danger btn-sm" id="btnRun">
+                        <span class="glyphicon glyphicon-play"></span> Run
+                    </button>
+                    <button class="btn btn-danger btn-sm" id="btnStop">
+                        <span class="glyphicon glyphicon-stop"></span> Stop
+                    </button>
+                </div>
+                &nbsp;
+                <div class="btn-group">
+                    <button class="btn btn-info btn-sm" id="btnSaveLocal">
+                        <span class="glyphicon glyphicon-import"></span> Save
+                    </button>
+                    <button class="btn btn-info btn-sm" id="btnRestoreLocal">
+                        <span class="glyphicon glyphicon-export"></span> Restore
+                    </button>
+                    <input id="fileinput" type="file" style="display:none;" onchange="restore_fromFile()" />
+                    <button class="btn btn-info btn-sm" id="btnFalseInput">
+                        <span class="glyphicon glyphicon-open"></span> Open
+                    </button>
+                    <input id="fileinput" type="file" style="display:none;" />
+                    <button class="btn btn-info btn-sm" id="btnDownload">
+                        <span class="glyphicon glyphicon-download"></span> Download
+                    </button>
+                </div>
+                &nbsp;
+                <div class="btn-group">
+                    <a class="dropdown-toggle btn btn-success btn-sm" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="btnExamples">
+                        <span class="glyphicon glyphicon-menu-hamburger"></span> Examples <span class="caret"></span>
+                    </a>
+                        <ul class="dropdown-menu">
+                            <li><a id="Example1" class="cursor-hand">Example 1</a></li>
+                            <li><a id="Example2" class="cursor-hand">Example 2</a></li>
+                            <li><a id="Example3" class="cursor-hand">Example 3</a></li>
+                            <li><a id="Example4" class="cursor-hand">Example 4</a></li>
+                            <li><a id="Example5" class="cursor-hand">Example 5</a></li>
+                            <!--
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                                -->
+                        </ul>
+                    </a>
+                    <!--
+                    <button class="btn btn-default btn-sm" id="btnToggle">
+                        <span class="glyphicon glyphicon-import"></span>
+                    </button>
+                    -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Begin page content -->
+        <div class="center-container">
+            <div class="center-row" id="center_row" style="">
+                <!--
+                <table style="width:100%;height:100%;padding:0;">
+                    <tr>
+                        <td id="center_row" style="vertical-align:top;"></td>
+                        <td id="toolbox" style="width:250px;background-color:bisque;vertical-align:top;padding-left:10px;padding-top:20px;border-left:1px solid silver;border-top:1px solid silver;">
+                            Тоолбокс<br>
+                        </td>
+                    </tr>
+                </table>
+                -->
+            </div>
+        </div>
+        <div id="footer">
+            <div>
+                &nbsp;
+                <span style="float:left;font-family:'Courier New';width: 60px;text-align:right;padding-right:10px;">
+                    <!--<i class="fa fa-cog fa-spin" style="font-size:36px;color:red;"></i>-->
+                    <i class="fa fa-caret-right" style="font-size:20px;color:silver;" id="status_icon"></i>
+                </span>
+                <span id="status_bar" style="float:left;color:whitesmoke;font-size:10pt;"></span>
+                <span style="float: right; color:silver;font-size:9pt;">&copy; <i>2017 - hp102 production&nbsp;</i>&nbsp;</span>
+            </div>
+            <div class="container">
+            </div>
+        </div>
+    </div>
+    <!-- End page content -->
+</body>
+</html>
+<script>
+    //$(document).ready(function () {
+    //    $("#falseinput").click(function () {
+    //        $("#fileinput").click();
+    //    });
+    //});
+
+    function toolbar_clicked()
+    {
+        unselect();
+    }
+
+    var paper = null;
+
+    function onload() {
+        set_paper();
+        ini_button("btnAddTrans", function () { NewTransition(35, 45); }, "Add transition node");
+        ini_button("btnAddPlace", function () { NewPlace(35, 45); }, "Add place node");
+        ini_button("btnRemoveObj", function () { RemoveObject(); }, "Remove selected object");
+        ini_button("btnClearPaper", function () { clear_paper(); }, "Clear canvas");
+        ini_button("btnRun", function () { run_clicked(); }, "Run Petri Net graph");
+        ini_button("btnStop", function () { stop_clicked(); }, "Stop running");
+        ini_button("btnSaveLocal", function () { save_local(); }, "Save to local memory");
+        ini_button("btnRestoreLocal", function () { restore_local(); }, "Restore from local memory");
+        ini_button("btnFalseInput", function () { open_clicked(); }, "Open from file");
+        ini_button("btnDownload", function () { save_toFile(); }, "Download as file");
+        ini_button("btnTokenAdd", function () { token_add(); }, "Add token to selected place");
+        ini_button("btnTokenRemove", function () { token_remove(); }, "Remove token from selected place");
+        ini_button("Example1", function () { load_example(1); }, "Example 1");
+        ini_button("Example2", function () { load_example(2); }, "Example 2");
+        ini_button("Example3", function () { load_example(3); }, "Example 3");
+        ini_button("Example4", function () { load_example(4); }, "Example 4");
+        ini_button("Example5", function () { load_example(5); }, "Example 5");
+        var elem = null;
+        elem = document.getElementById("selected_label");
+        elem.onmouseover = function () { set_status("Displays selected object (click to unselect)"); };
+        elem.onmouseout = function () { set_status(""); };
+        elem = document.getElementById("logo_link");
+        elem.onmouseover = function () { set_status("Home page"); };
+        elem.onmouseout = function () { set_status(""); };
+
+        //var btn = document.getElementById("btnToggle");
+        //btn.onclick = function () {
+        //    var tb = document.getElementById("toolbox");
+        //    tb.innerHTML = "Events<br>Events<br>Events<br>Events<br>Events<br>";
+        //    tb.width = "500px";
+        //};
+    }
+    function ini_button(id, onclick, tooltip)
+    {
+        var btn = document.getElementById(id);
+        btn.onclick = onclick;
+        btn.onmouseover = function () { set_status(tooltip); };
+        btn.onmouseout = function () { set_status(""); };
+    }
+    function open_clicked() {
+        if (IsRunning) {
+            StopRun();
+            set_default_icon();
+            unlock_status();
+            set_status("");
+        }
+        document.getElementById('fileinput').click();
+    }
+    function set_paper() {
+        var center_row = document.getElementById("center_row");
+        paper = new Raphael("center_row");
+        PAPER_WIDTH = center_row.offsetWidth;
+        PAPER_HEIGHT = center_row.offsetHeight;
+        paper_initialize();
+    }
+    function clear_paper() {
+        ResetPnet();
+        paper.clear();
+        paper_initialize();
+    }
+    function body_onresize() {
+        if (paper != null) {
+            var text = SerializePnet(Places, Trans, Arcs);
+            localStorage.setItem("paper_temp", text);
+            paper.remove();
+            set_paper();
+            var pn = JSON.parse(localStorage.getItem("paper_temp"));
+            DeserializePnet(pn);
+        }
+        //set_status("Resizing...");
+    }
+    function paper_initialize()
+    {
+        set_status("Ready");
+        //paper.rect(0, 0, PAPER_WIDTH, PAPER_HEIGHT).attr({ "stroke-width": "4", "stroke": "red", "fill": "white" });
+    }
+    function run_clicked() {
+        //console.log("graph_loaded=" + graph_loaded());
+        if (graph_loaded()) {
+            set_run_icon();
+            set_status("Running...");
+            lock_status();
+            StartRun();
+        }
+        else
+        {
+            set_status("No valid graph loaded.");
+        }
+    }
+    function set_run_icon()
+    {
+        document.getElementById("status_icon").className = "fa fa-cog fa-spin";
+    }
+    function set_default_icon() {
+        document.getElementById("status_icon").className = "fa fa-caret-right";
+    }
+    function stop_clicked() {
+        if (IsRunning) {
+            set_default_icon();
+            unlock_status();
+            set_status("Stopped.");
+            StopRun();
+        }
+        else {
+            set_status("There is no running graph.");
+        }
+    }
+    function restore_local() {
+        clear_paper();
+        RestoreFromLocalStorage();
+    }
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    function token_add() {
+        if (Selected != null && Selected.node.key.substr(0, 1) == "P") {
+            AddToken(Places[Selected.node.key]);
+        }
+        else {
+            set_status("No selected placed.");
+        }
+    }
+    function token_remove() {
+        if (Selected != null && Selected.node.key.substr(0, 1) == "P") {
+            RemoveToken(Places[Selected.node.key]);
+        }
+        else {
+            set_status("No selected placed.");
+        }
+    }
+    function save_toFile() {
+        SaveToFile("pnet.txt")
+
+    }
+    // Usage!
+    function load_example(i) {
+        if (IsRunning) {
+            //StopRun();
+            //sleep(1100).then(() => {
+            //    load_example(i);
+            //});
+        }
+        else
+        {
+            var pn = [];
+            pn[1] = { "places": ["P1,74,215,0", "P2,75,294,1", "P3,77,382,1", "P4,303,254,0", "P5,301,341,0", "P6,303,187,0", "P7,387,372,0", "P8,610,318,0", "P9,385,455,0"], "trans": ["T1,183,247", "T2,182,333", "T3,181,160", "T4,182,417", "T5,425,194", "T6,494,452"], "arcs": ["P1,T1", "P2,T1", "P2,T2", "P3,T2", "T1,P4", "T2,P5", "T1,P2", "T2,P2", "P5,T3", "T3,P1", "P4,T4", "T4,P3", "T1,P6", "P6,T5", "T5,P7", "P7,T4", "T5,P8", "P8,T6", "T6,P9", "P9,T4"] };
+            pn[2] = { "places": ["P1,305,245,2", "P2,323,107,0", "P3,510,106,0"], "trans": ["T1,217,104", "T2,409,177", "T3,416,55"], "arcs": ["P1,T1", "T1,P2", "T3,P3", "P3,T2", "P2,T3", "P2,T2", "T2,P1", "T2,P1"] };
+            pn[3] = { "places": ["P1,383,303,1", "P2,384,219,1", "P3,385,147,1", "P4,632,218,1"], "trans": ["T1,497,301", "T2,497,224", "T4,495,151"], "arcs": ["P1,T1", "P2,T2", "P4,T1", "T4,P4", "T4,P1", "T4,P2", "T4,P3", "T1,P4", "T2,P4", "P4,T2", "P3,T4", "P4,T4"] };
+            pn[4] = { "places": ["P1,78,186,1", "P2,75,296,1", "P3,82,395,1", "P4,301,148,0", "P5,310,442,0", "P6,306,246,0", "P7,307,339,0"], "trans": ["T1,186,238", "T2,188,342", "T3,186,153", "T4,188,443"], "arcs": ["P1,T1", "P2,T1", "P2,T2", "P3,T2", "T1,P4", "T2,P5", "T2,P2", "T1,P2", "T2,P6", "P6,T3", "P4,T3", "T3,P1", "T1,P7", "P7,T4", "T4,P3", "P5,T4"] };
+            pn[5] = { "places": ["P1,440,90,1", "P2,531,65,1", "P3,617,44,1", "P4,536,344,1", "P5,303,189,0", "P6,537,194,0", "P7,766,188,0"], "trans": ["T1,210,189", "T2,446,191", "T3,683,191", "T4,877,186", "T5,614,191", "T6,382,188"], "arcs": ["P1,T1", "P2,T2", "P3,T3", "P4,T1", "P4,T2", "P4,T3", "T1,P5", "T2,P6", "T3,P7", "P7,T4", "P6,T5", "P5,T6", "T6,P4", "T5,P4", "T4,P4", "T4,P1", "T4,P2", "T4,P3"] };
+            clear_paper();
+            DeserializePnet(pn[i]);
+        }
+    }
+    function restore_fromFile() {
+        //reset_workspace();
+        if (IsRunning)
+        {
+            StopRun();
+        }
+        clear_paper();
+        var file = document.getElementById("fileinput").files[0];
+        ReadFromFile(file, function (event) {
+            try
+            {
+                var pn = JSON.parse(event.target.result);
+                DeserializePnet(pn);
+            }
+            catch(err)
+            {
+                console.log(err.message);
+            }
+        });
+    }
+    function save_local() {
+        SaveToLocalStorage()
+    }
+    function page_onload() {
+        //RestoreSettings();
+        paper = Raphael(10, 50, PAPER_WIDTH, PAPER_HEIGHT);
+        reset_workspace();
+    }
+
+</script>

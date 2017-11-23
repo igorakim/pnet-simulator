@@ -1,0 +1,85 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>PNets</title>
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <link href="css/bootstrap_override.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="scripts/jquery-1.9.1.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+    <script src="js/ui.js"></script>
+</head>
+<body onload="onload()">
+    <!-- Wrap all page content here -->
+    <div id="wrap">
+        <!-- Fixed navbar -->
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a id="logo_link" class="navbar-brand" style="cursor:pointer" onclick="javascript: window.location = 'index.html'"><img src="images/logo.png" height="25"></a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a id="pnet_link" style="cursor: pointer" onclick="javascript: window.location = 'pnet.html'">Petri Net</a></li>
+                        <li><a id="about_link" style="cursor: pointer" onclick="javascript:window.location='about.html'">About</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Begin page content -->
+        <div class="center-container">
+            <div class="center-row" id="center_row">
+                <!-- MAIN page content -->
+                <div class="container" style="height:100%;background-color:none; padding: 0 0 0 0;">
+                    <br>
+                    <div class="page-header">
+                        <h1>Petri Net Simulator <small></small></h1>
+                    </div>
+                    <div class="col-sm-7">
+                        Hello, this is very simple Petri Net simulation program that was developed with Raphael SVG library. Below you can find tutorial video how to use it, but
+                        also you can jump directly to the point because it pretty straight forward and intuitive. 
+                        <br>
+                        <br>
+                    </div>
+                    <div class="col-sm-7">
+                        <i>Designed and developed by Igor Kim.</i>
+                        <br>
+                        <br>
+                    </div>
+                    <div class="col-sm-7">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/sMpqECG7-xA" frameborder="0" allowfullscreen></iframe>
+                    </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <div>
+            &nbsp;
+            <span style="float:left;font-family:'Courier New';width: 60px;text-align:right;padding-right:10px;">
+                <!--<i class="fa fa-cog fa-spin" style="font-size:36px;color:red;"></i>-->
+                <i class="fa fa-caret-right" style="font-size:20px;color:silver;" id="status_icon"></i>
+            </span>
+            <span id="status_bar" style="float:left;color:whitesmoke;font-size:10pt;"></span>
+            <span style="float: right; color:silver;font-size:9pt;">&copy; <i>2017 - hp102 production&nbsp;</i>&nbsp;</span>
+        </div>
+        <div class="container">
+        </div>
+    </div>
+    <script src="Scripts/jquery-1.9.1.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+</body>
+</html>
+<script>
+    function onload() {
+        var elem = null;
+        elem = document.getElementById("logo_link");
+        elem.onmouseover = function () { set_status("Home page"); };
+        elem.onmouseout = function () { set_status(""); };
+        elem = document.getElementById("pnet_link");
+        elem.onmouseover = function () { set_status("Petri Net builder"); };
+        elem.onmouseout = function () { set_status(""); };
+        elem = document.getElementById("about_link");
+        elem.onmouseover = function () { set_status("About the application"); };
+        elem.onmouseout = function () { set_status(""); };
+    }
+
+</script>
