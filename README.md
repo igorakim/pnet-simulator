@@ -1,3 +1,2 @@
 # pnet-simulator
-Petri Net Simulator program
-Live demo at http://petri.hp102.ru
+Petri Net Simulator program - live demo at http://petri.hp102.ru
